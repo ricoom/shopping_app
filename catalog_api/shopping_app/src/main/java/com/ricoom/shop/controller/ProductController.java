@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ricoom.shop.Dtos.ProductDto;
+import com.ricoom.shop.Dtos.ProductsPage;
 import com.ricoom.shop.models.Category;
 import com.ricoom.shop.models.Product;
 import com.ricoom.shop.servicesImpl.ProductServiceImpl;
@@ -32,11 +33,22 @@ public ResponseEntity<ProductDto> addNewProduct(@RequestBody ProductDto product)
 	
 	return new ResponseEntity<ProductDto>(productService.addProduct(product),HttpStatus.OK);
 }
-@GetMapping("/product")
-public ResponseEntity<List<Product>> findOneProductByCat(@RequestBody Category category) {
+@GetMapping("/products/{category}")
+public ResponseEntity<List<Product>> findOneProductByCat(@PathVariable String category) {
 	
 	
 	return new ResponseEntity<List<Product>>(productService.findBycategoty(category),HttpStatus.OK);
+}
+//@GetMapping("/products")
+//public ResponseEntity<List<Product>> findAll() {
+//	
+//	return new ResponseEntity<List<Product>>(productService.getProducts(),HttpStatus.OK);
+//}
+@GetMapping("/products")
+public ResponseEntity<ProductsPage> findAllPaged(
+		@RequestParam(defaultValue = "0",required = false)int pageNumber,
+		@RequestParam(defaultValue = "5", required = false) int pageSize) {
+	return new ResponseEntity<ProductsPage>(productService.getpageProducts(pageNumber, pageSize), HttpStatus.OK);
 }
 
 }

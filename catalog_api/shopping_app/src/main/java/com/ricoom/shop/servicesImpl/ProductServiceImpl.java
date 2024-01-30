@@ -2,9 +2,13 @@ package com.ricoom.shop.servicesImpl;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.ricoom.shop.Dtos.ProductDto;
+import com.ricoom.shop.Dtos.ProductsPage;
 import com.ricoom.shop.models.Category;
 import com.ricoom.shop.models.Product;
 import com.ricoom.shop.productRepositories.CategoryRepository;
@@ -28,6 +32,7 @@ private CategoryRepository categoryRepository;
 		_product.setDicountPercentage(product.getDicountPercentage());
 		_product.setBrand(product.getBrand());
 		_product.setStock(product.getStock());
+		_product.setImages(product.getImages());
 		_product.setRating(product.getRating());
 
         if (existingCategory != null) {
@@ -49,7 +54,7 @@ private CategoryRepository categoryRepository;
 	@Override
 	public List<Product> getProducts() {
 		// TODO Auto-generated method stub
-		return null;
+		return productRepo.findAll();
 	}
 
 	@Override
@@ -59,14 +64,30 @@ private CategoryRepository categoryRepository;
 	}
 
 	@Override
-	public List<Product> findBycategoty(Category categoryName) {
-		return productRepo.findBycategory(categoryName);
+	public List<Product> findBycategoty(String categoryName) {
+		Category cat= categoryRepository.findBycategoryname(categoryName);
+		if(cat!=null) {
+			return cat.getProducts();
+
+		}else {
+			return null;
+		}
 	}
 
 	@Override
 	public Category createCategory(String categoryname) {
 		
 		return null;
+	}
+
+	
+
+	@Override
+	public ProductsPage getpageProducts(int pageNumber, int pageSize) {
+		Pageable pageable =PageRequest.of(pageNumber, pageSize);
+		Page<Product> productsPage=productRepo.findAll(pageable);
+		
+		return new ProductsPage(productsPage.getContent(), pageNumber, pageSize,productsPage.getTotalElements());
 	}
 
 }

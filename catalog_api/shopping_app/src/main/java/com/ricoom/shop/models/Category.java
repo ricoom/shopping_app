@@ -23,7 +23,7 @@ public class Category {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 private long categoryId;
 private String categoryname;
-
+@JsonIgnore
 @OneToMany(mappedBy = "category",cascade = CascadeType.PERSIST,fetch = FetchType.EAGER)
 private List<Product> products = new ArrayList<>();
 

@@ -8,6 +8,6 @@ import com.ricoom.shop.models.Category;
 
 public interface CategoryRepository extends JpaRepository<Category, Long> {
 
-	Category findBycategoryname(String categoryname);
+	 Category findBycategoryname(String categoryname);
 	
 }
